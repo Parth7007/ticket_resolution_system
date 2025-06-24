@@ -4,7 +4,7 @@ from typing import Optional
 class TicketRequest(BaseModel):
     subject: str
     body: str
-    admin_solution: Optional[str] = None  # Optional input from admin
+    admin_solution: Optional[str] = None  # Optional
 
 class TicketResponse(BaseModel):
     subject: str

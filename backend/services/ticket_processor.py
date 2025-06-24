@@ -3,17 +3,17 @@
 from sqlalchemy.orm import Session
 from db.models import Ticket
 from utils.preprocess import clean_text
-from models.ml_model import classify_ticket  # Updated name
-from models.genai_model import call_llama_groq  # Updated for llama usage
+from models.ml_model import classify_ticket
+from models.genai_model import call_llama_groq
 
 def process_ticket(subject: str, body: str) -> dict:
-    # Preprocess combined text
-    full_text = clean_text(subject + " " + body)
+    # Clean combined text
+    combined_text = clean_text(subject + " " + body)
 
-    # Predict using ML model (currently returns "software", priority)
-    ticket_type, priority = classify_ticket(subject, body)
+    # Predict ticket type and priority using ML model
+    ticket_type, priority = classify_ticket(combined_text)
 
-    # Generate solution using GenAI
+    # Generate resolution using GenAI (Groq LLaMA 3)
     resolution = call_llama_groq(subject, body, ticket_type, priority)
 
     return {
@@ -43,4 +43,4 @@ def store_ticket(
     db.add(ticket)
     db.commit()
     db.refresh(ticket)
-    return ticket
+    return ticket  # Optional: useful for logging or debugging
