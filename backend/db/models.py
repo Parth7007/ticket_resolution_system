@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, DateTime
+from sqlalchemy.sql import func
 from .postgres import Base
 
 class Ticket(Base):
@@ -10,4 +11,6 @@ class Ticket(Base):
     ticket_type = Column(String, nullable=False)
     priority = Column(String, nullable=False)
     resolution = Column(Text, nullable=True)
-    admin_solution = Column(Text, nullable=True)  # Optional IT admin solution
+    admin_solution = Column(Text, nullable=True)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())  # 👈 Add this line

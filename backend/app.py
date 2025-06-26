@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import ticket_routes, ocr_routes
 
-
+from routes.all_tickets_routes import router as all_tickets_router
 
 app = FastAPI(
     title="AI Helpdesk Ticket Resolution System",
@@ -23,6 +23,8 @@ app.add_middleware(
 app.include_router(ticket_routes.router, prefix="/api/tickets", tags=["Tickets"])
 
 app.include_router(ocr_routes.router, prefix="/api/ocr", tags=["OCR"])
+
+app.include_router(all_tickets_router, prefix="/api")
 @app.get("/")
 def root():
     return {"message": "AI Helpdesk Backend is running"}
