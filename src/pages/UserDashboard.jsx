@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { CheckCircle, Sparkles, ArrowRight, RefreshCw } from 'lucide-react';
+import {
+  CheckCircle,
+  Sparkles,
+  ArrowRight,
+  RefreshCw,
+} from 'lucide-react';
 import TextTicketForm from '../components/forms/TextTicketForm';
 import ImageTicketForm from '../components/forms/ImageTicketForm';
 import TicketCard from '../components/dashboard/TicketCard';
 import { ticketAPI } from '../services/api';
+import ProfileDropdown from '../components/shared/ProfileDropdown';
 
 const UserDashboard = () => {
   const [activeForm, setActiveForm] = useState('text');
@@ -14,7 +20,7 @@ const UserDashboard = () => {
   const handleSubmitTextTicket = async (formData) => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response = await ticketAPI.submitTextTicket(formData);
       setSubmittedTicket(response);
@@ -29,7 +35,7 @@ const UserDashboard = () => {
   const handleSubmitImageTicket = async (formData) => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response = await ticketAPI.submitImageTicket(formData);
       setSubmittedTicket(response);
@@ -49,6 +55,19 @@ const UserDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Top Bar with Profile */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-800">
+              Welcome to the User Dashboard
+            </h1>
+            <p className="text-sm text-gray-500">
+              Submit and track your support tickets.
+            </p>
+          </div>
+          <ProfileDropdown />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
@@ -82,7 +101,6 @@ const UserDashboard = () => {
         )}
 
         {submittedTicket ? (
-          /* Success State */
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -95,9 +113,9 @@ const UserDashboard = () => {
                 Our AI has analyzed your issue and generated a resolution
               </p>
             </div>
-            
+
             <TicketCard ticket={submittedTicket} />
-            
+
             <div className="text-center mt-8">
               <button
                 onClick={resetForm}
@@ -109,7 +127,6 @@ const UserDashboard = () => {
             </div>
           </div>
         ) : (
-          /* Form State */
           <div className="max-w-6xl mx-auto">
             {/* Form Type Selector */}
             <div className="flex justify-center mb-8">
@@ -143,28 +160,30 @@ const UserDashboard = () => {
             <div className="grid lg:grid-cols-2 gap-8 items-start">
               <div>
                 {activeForm === 'text' ? (
-                  <TextTicketForm 
+                  <TextTicketForm
                     onSubmit={handleSubmitTextTicket}
                     isLoading={isLoading}
                   />
                 ) : (
-                  <ImageTicketForm 
+                  <ImageTicketForm
                     onSubmit={handleSubmitImageTicket}
                     isLoading={isLoading}
                   />
                 )}
               </div>
-              
+
               {/* Info Panel */}
               <div className="space-y-6">
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-6 border border-blue-200">
                   <div className="flex items-center mb-4">
                     <Sparkles className="h-6 w-6 text-blue-600 mr-2" />
-                    <h3 className="text-lg font-semibold text-blue-800">AI-Powered Resolution</h3>
+                    <h3 className="text-lg font-semibold text-blue-800">
+                      AI-Powered Resolution
+                    </h3>
                   </div>
                   <p className="text-blue-700 leading-relaxed">
-                    Our advanced AI analyzes your issue and provides instant, personalized solutions 
-                    based on thousands of resolved tickets.
+                    Our advanced AI analyzes your issue and provides instant, personalized
+                    solutions based on thousands of resolved tickets.
                   </p>
                 </div>
 
@@ -192,7 +211,9 @@ const UserDashboard = () => {
                 </div>
 
                 <div className="bg-gradient-to-br from-green-50 to-teal-100 rounded-2xl p-6 border border-green-200">
-                  <h3 className="text-lg font-semibold text-green-800 mb-3">Quick Tips</h3>
+                  <h3 className="text-lg font-semibold text-green-800 mb-3">
+                    Quick Tips
+                  </h3>
                   <ul className="space-y-2 text-green-700 text-sm">
                     <li>• Be specific about when the issue occurs</li>
                     <li>• Include error messages if available</li>

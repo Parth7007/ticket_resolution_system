@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import Loader from '../components/shared/Loader';
 import { ticketAPI } from '../services/api';
-
+import ProfileDropdown from '../components/shared/ProfileDropdown';
 // Utility: Download large text as .txt file
 const downloadTextFile = (filename, text) => {
   const blob = new Blob([text], { type: 'text/plain' });
@@ -482,7 +482,7 @@ const AdminDashboard = () => {
     );
   };
 
-  if (isLoading) {
+if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Loader size="xl" text="Loading admin dashboard..." />
@@ -494,20 +494,25 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        {/* Header with Profile */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-gray-600 mt-1">Manage and monitor IT support tickets</p>
           </div>
-          <button
-            onClick={fetchTickets}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center transition-colors"
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </button>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={fetchTickets}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center transition-colors"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </button>
+            <ProfileDropdown /> {/* ✅ Profile dropdown here */}
+          </div>
         </div>
 
+        {/* Error Display */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-8">
             <div className="flex items-center">
@@ -517,6 +522,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <StatCard title="Total Tickets" value={stats.total} icon={Users} color="text-blue-600" bgColor="bg-blue-50" />
           <StatCard title="Resolved" value={stats.resolved} icon={CheckCircle} color="text-green-600" bgColor="bg-green-50" />
@@ -526,8 +532,10 @@ const AdminDashboard = () => {
           <StatCard title="Hardware" value={stats.hardware} icon={Clock} color="text-indigo-600" bgColor="bg-indigo-50" />
         </div>
 
+        {/* Filters */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Search Input */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <input
@@ -539,6 +547,7 @@ const AdminDashboard = () => {
               />
             </div>
 
+            {/* Dropdowns */}
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
@@ -572,11 +581,13 @@ const AdminDashboard = () => {
           </div>
         </div>
 
+        {/* Ticket Count Info */}
         <div className="mb-4 text-sm text-gray-600">
           Found {filteredTickets.length} ticket{filteredTickets.length !== 1 ? 's' : ''}
           {filteredTickets.length !== tickets.length && ` (filtered from ${tickets.length} total)`}
         </div>
 
+        {/* Ticket List */}
         {paginatedTickets.length === 0 ? (
           <div className="text-center py-12">
             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
